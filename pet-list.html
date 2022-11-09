@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pets list - Swagger petstore</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    table {
+      border: 2px solid black;
+      border-collapse: collapse;
+    }
+    thead {
+      border: 1px solid black;
+    }
+    th, td {
+      border: 1px dotted black;
+      padding: 5px;
+    }
+    th {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Swagger petstore</h1>
+  <h2>Pets list</h2>
+  <table>
+    <caption>List of all the Swagger petstore pets</caption>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>ID</th>
+      </tr>
+    </thead>
+    <tbody id="pets-table">
+
+    </tbody>
+  </table>
+  <script>
+    const fields = ['name', 'status', 'id'];
+    const tableBody = document.getElementById('pets-table');
+    async function petsTable(URL, elem, columns) {
+      const petsRaw = await fetch(URL)
+      .then(response => response.json())
+      .catch(error => console.error('Error:', error))
+      petsRaw.forEach(pet => {
+        const row = document.createElement('tr')
+        columns.forEach(column => {
+          const cell = document.createElement('td')
+          cell.innerText = (pet[column])
+          row.appendChild(cell)
+        })
+        elem.appendChild(row)
+      });
+    }
+    petsTable('https://petstore.swagger.io/v2/pet/findByStatus?status=available&status=pending&status=sold', tableBody, fields )
+  </script>
+</body>
+</html>
